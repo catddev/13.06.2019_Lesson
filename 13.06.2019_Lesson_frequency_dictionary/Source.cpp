@@ -195,18 +195,11 @@ int main() {
 		break;
 		case 6:
 		{
-			/*for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
+			for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
 				cout << el.first << " " << el.second << endl;
-			});*/
+			});
 
-			//cout << "Equal ranges from multimap" << endl;
-			cout << endl << "Library" << endl;
-			for (auto it = bookset.begin(); it != bookset.end(); it++) {
-				auto ret = lib.equal_range(*it);
-				cout << ret.first->first << endl;
-				for (auto mit = ret.first; mit != ret.second; mit++)
-					cout << mit->second << endl;
-			}
+
 		}
 		break;
 		case 0:
@@ -215,6 +208,14 @@ int main() {
 		}
 	}
 
+	//cout << "Equal ranges from multimap" << endl;
+	cout << endl << "Library" << endl;
+	for (auto it = bookset.begin(); it != bookset.end(); it++) {
+		auto ret = lib.equal_range(*it);
+		cout << ret.first->first << endl;
+		for (auto mit = ret.first; mit != ret.second; mit++)
+			cout << mit->second << endl;
+	}
 
 
 	system("pause");
