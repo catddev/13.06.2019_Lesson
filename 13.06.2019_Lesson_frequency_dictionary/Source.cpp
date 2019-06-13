@@ -115,7 +115,7 @@ int main() {
 
 	ifstream lib_file("library.txt");
 	multimap<Book, int> lib;
-	set<Book, setBook> bookset;
+	//set<Book, setBook> bookset;
 	string str1;
 	int i = 0;
 
@@ -128,7 +128,7 @@ int main() {
 		lib_file >> number;
 		lib_file.ignore();
 		lib.insert(pair<Book, int>(Book(author, title, publish, number), i++));
-		bookset.insert(Book(author, title, publish, number));
+		//bookset.insert(Book(author, title, publish, number));
 	}
 	cout << endl;
 	for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
@@ -167,6 +167,7 @@ int main() {
 		break;
 		case 3:
 		{
+			cin.ignore();
 			cin >> yourBook;
 			lib.insert(pair<Book, int>(yourBook, i++));
 		}
