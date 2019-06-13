@@ -1,7 +1,12 @@
+One
 one
-two
-three
-four
-five
+Two
+Three
+Four
+Five
 six
 seven
+Один
+один
+ДВА
+ТРИ

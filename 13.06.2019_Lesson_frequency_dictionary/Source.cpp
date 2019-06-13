@@ -7,8 +7,9 @@
 #include<fstream>
 #include<Windows.h>
 #include<set>
+#include<queue>
 #include<vector>
-
+#include"Book.h"
 using namespace std;
 
 
@@ -24,6 +25,7 @@ int main() {
 	//for_each(d.begin(), d.end(), [](pair<string, int> el) {//for MAP always use template class (PAIR<type, type>) with name El, т.кю мэп содержит 2 значения
 	//	cout << el.first << " " << el.second << endl;
 	//});
+	//cout << endl;
 
 	//1.	Программа проверки правильности слов в текстовом файле.
 	//Проверка правильности осуществляется с помощью частотного словаря.
@@ -38,90 +40,180 @@ int main() {
 	//В реализации программы приветствуется наличие удобного пользовательского интерфейса(приложение консольное),
 	//а также наличие самостоятельно разработанных для решения поставленной задачи классов.
 
+	setlocale(LC_ALL, "");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	//ifstream read_file("read.txt");
+	//
+	//vector<string> v;
+	//set<string> sd;
 
+	//string str;
+	//while (!read_file.eof()) {
+	//	read_file >> str;
+	//	transform(str.begin(), str.end(), str.begin(), ::tolower);//string to lower!!!
+	//	sd.insert(str);
+	//}
+	//for_each(sd.begin(), sd.end(), [](string el) {
+	//	cout << el << endl;
+	//});
+	//cout << endl;
 
-	//Написать программу учета книг в библиотеке.Сведения о книгах : ФИО автора, название, год издания, количество экземпляров.Обеспечить :
+	//ifstream text("check_text.txt");
+	//while (!text.eof()) {
+	//	text >> str;
+	//	v.push_back(str);
+	//}
+
+	//for (auto it = v.begin(); it != v.end(); it++)
+	//{
+	//	auto fit = sd.find(*it);//fit - find_iterator
+	//	if (fit != sd.end())
+	//		continue;
+	//	else {
+	//		int choice;
+	//		cout << "There is no word \"" << *it << "\" in the dictionary" << endl;
+	//		cout << "Enter 1 to change this word" << endl;
+	//		cout << "Enter 2 to add this word into the dictionary" << endl;
+	//		cin >> choice;
+
+	//		switch (choice) {
+	//		case 1:
+	//		{
+	//			string tmp = *it;
+	//			string str;
+	//			cout << "Enter new word" << endl;
+	//			cin >> str;
+	//			replace(v.begin(), v.end(), tmp, str);
+	//		}
+	//		break;
+	//		case 2:
+	//			sd.insert(*it);
+	//		break;
+	//		}
+	//	}
+	//}
+
+	//cout << "TEXT REDACTED" << endl;
+	//for_each(v.begin(), v.end(), [](string el) {
+	//	cout << el << endl;
+	//});
+
+	//cout << endl << "DICTIONARY" << endl;
+	//for_each(sd.begin(), sd.end(), [](string el) {
+	//	cout << el << endl;
+	//});
+
+	//Написать программу учета книг в библиотеке. Сведения о книгах : ФИО автора, название, год издания, количество экземпляров.
+	//Обеспечить :
 	//		Добавление книг
 	//		Удаление книг
 	//		Вывод сведений о книгах по фамилиям авторов
 	//		Вывод сведений о книгах по указанному году издания
 	//	Использовать контейнерный класс multimap
 
-	//use set or map//photo
 
-	setlocale(LC_ALL, "");
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-	ifstream read_file("read.txt");
-	
-	vector<string> v;
-	set<string> sd;
+	ifstream lib_file("library.txt");
+	multimap<Book, int> lib;
+	set<Book, setBook> bookset;
+	string str1;
+	int i = 0;
 
-	string str;
-	while (!read_file.eof()) {
-		read_file >> str;
-		//str=_tolower(str);//?
-		//_strlwr_(str);
-		//d.insert(pair<string, int>(s,1)); //for multimap
-		sd.insert(str);
-		
+	string author, title, publish;
+	int number;
+	while (!lib_file.eof()) {
+		getline(lib_file, author, '#');
+		getline(lib_file, title, '#');
+		getline(lib_file, publish, '#');
+		lib_file >> number;
+		lib_file.ignore();
+		lib.insert(pair<Book, int>(Book(author, title, publish, number), i++));
+		bookset.insert(Book(author, title, publish, number));
 	}
-	for_each(sd.begin(), sd.end(), [](string el) {
-		cout << el << endl;
+	cout << endl;
+	for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
+		cout << el.first << " " << el.second << endl;
 	});
 
-	ifstream text_file("check_text.txt");
-	while (!text_file.eof()) {
-		text_file >> str;
-		v.push_back(str);
-	}
+	bool f = true;
+	while (f) {
+		cout << endl << "Enter 1 to find a book" << endl;
+		cout << "Enter 2 to remove a book" << endl;
+		cout << "Enter 3 to add a book" << endl;
+		cout << "Enter 4 to get books by author" << endl;
+		cout << "Enter 5 to get books by publishing year" << endl;
+		cout << "Enter 6 to print the library list" << endl;
+		cout << "Enter 0 to exit" << endl;
+		int choice1;
+		cin >> choice1;
+		Book yourBook;
 
-
-
-	int choice;
-
-	for (auto it = v.begin(); it != v.end(); it++)
-	{
-		auto fit = sd.find(*it);
-		if (fit != sd.end())
-			continue;
-		else {
-
-			int choice;
-			cout << "Enter 1 to change this word" << endl;
-			cout << "Enter 2 to add this word into the dictionary" << endl;
-			cin >> choice;
-			
-			switch (choice) {
-			case 1:
-			{
-				string tmp = *it;
-				string str;
-				cout << "Enter new word" << endl;
-				cin >> str;
-				replace(v.begin(), v.end(), tmp, str);
-			}
-			break;
-			case 2:
-			{
-				sd.insert(*it);
-
-			}
-			break;
-			}
-
+		switch (choice1) {
+		case 1:
+		{
+			cin >> yourBook;
+			auto it = lib.find(yourBook);
+			if (it != lib.end())
+				cout << it->first << " " << it->second << endl;
 		}
-
+		break;
+		case 2:
+		{
+			cin >> yourBook;
+			auto it = lib.find(yourBook);
+			if (it != lib.end())
+				lib.erase(it);
+		}
+		break;
+		case 3:
+		{
+			cin >> yourBook;
+			lib.insert(pair<Book, int>(yourBook, i++));
+		}
+		break;
+		case 4:
+		{
+			cout << "Enter author" << endl;
+			cin.ignore();
+			getline(cin, author, '#');
+			for (auto it = lib.begin(); it != lib.end(); it++) {
+				if (it->first.getAuthor() == author)
+					cout << it->first << " " << it->second << endl;
+			}
+		}
+		break;
+		case 5:
+		{
+			cout << "Enter publishing year" << endl;
+			cin >> publish;
+			for (auto it = lib.begin(); it != lib.end(); it++) {
+				if (it->first.getYear() == publish)
+					cout << it->first << " " << it->second << endl;
+			}
+		}
+		break;
+		case 6:
+		{
+			for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
+				cout << el.first << " " << el.second << endl;
+			});
+		}
+		break;
+		case 0:
+			f = false;
+			break;
+		}
 	}
 
-	for_each(v.begin(), v.end(), [](string el) {
-		cout << el << endl;
-	});
 
-	cout << endl << "DICTIONARY" << endl;
-	for_each(sd.begin(), sd.end(), [](string el) {
-		cout << el << endl;
-	});
+	//cout << "Equal ranges from multimap" << endl;
+	//for (auto it = bookset.begin(); it != bookset.end(); it++) {
+	//	auto ret = bookset.equal_range(*it);
+	//	cout << ret.first->first << endl;
+	//	for (auto mit = ret.first; mit != ret.second; mit++)
+	//		cout << mit->second << endl;
+	//}
+
 
 	system("pause");
 	return 0;
