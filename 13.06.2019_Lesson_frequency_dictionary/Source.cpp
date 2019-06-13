@@ -115,7 +115,7 @@ int main() {
 
 	ifstream lib_file("library.txt");
 	multimap<Book, int> lib;
-	//set<Book, setBook> bookset;
+	set<Book> bookset;
 	string str1;
 	int i = 0;
 
@@ -128,7 +128,7 @@ int main() {
 		lib_file >> number;
 		lib_file.ignore();
 		lib.insert(pair<Book, int>(Book(author, title, publish, number), i++));
-		//bookset.insert(Book(author, title, publish, number));
+		bookset.insert(Book(author, title, publish, number));
 	}
 	cout << endl;
 	for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
@@ -195,9 +195,18 @@ int main() {
 		break;
 		case 6:
 		{
-			for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
+			/*for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
 				cout << el.first << " " << el.second << endl;
-			});
+			});*/
+
+			//cout << "Equal ranges from multimap" << endl;
+			cout << endl << "Library" << endl;
+			for (auto it = bookset.begin(); it != bookset.end(); it++) {
+				auto ret = lib.equal_range(*it);
+				cout << ret.first->first << endl;
+				for (auto mit = ret.first; mit != ret.second; mit++)
+					cout << mit->second << endl;
+			}
 		}
 		break;
 		case 0:
@@ -206,14 +215,6 @@ int main() {
 		}
 	}
 
-
-	//cout << "Equal ranges from multimap" << endl;
-	//for (auto it = bookset.begin(); it != bookset.end(); it++) {
-	//	auto ret = bookset.equal_range(*it);
-	//	cout << ret.first->first << endl;
-	//	for (auto mit = ret.first; mit != ret.second; mit++)
-	//		cout << mit->second << endl;
-	//}
 
 
 	system("pause");
