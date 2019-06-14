@@ -114,8 +114,8 @@ int main() {
 
 
 	ifstream lib_file("library.txt");
-	multimap<Book, int> lib;
-	set<Book> bookset;
+	multimap<string, Book> lib;//author is a key
+	set<string> bookset;//set of unique multimap's keys!
 	string str1;
 	int i = 0;
 
@@ -127,22 +127,22 @@ int main() {
 		getline(lib_file, publish, '#');
 		lib_file >> number;
 		lib_file.ignore();
-		lib.insert(pair<Book, int>(Book(author, title, publish, number), i++));
-		bookset.insert(Book(author, title, publish, number));
+		bookset.insert(author);
+		lib.insert(pair<string, Book>(author, Book(author, title, publish, number)));
+		
 	}
-	cout << endl;
-	for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
-		cout << el.first << " " << el.second << endl;
-	});
+	//cout << endl;
+	//for_each(lib.begin(), lib.end(), [](pair<Book, string> el) {
+	//	cout << el.second << " " << el.first << endl;
+	//});
 
 	bool f = true;
 	while (f) {
-		cout << endl << "Enter 1 to find a book" << endl;
-		cout << "Enter 2 to remove a book" << endl;
-		cout << "Enter 3 to add a book" << endl;
-		cout << "Enter 4 to get books by author" << endl;
-		cout << "Enter 5 to get books by publishing year" << endl;
-		cout << "Enter 6 to print the library list" << endl;
+		cout << endl << "Enter 1 to remove a book" << endl;
+		cout << "Enter 2 to add a book" << endl;
+		cout << "Enter 3 to get books by author" << endl;
+		cout << "Enter 4 to get books by publishing year" << endl;
+		cout << "Enter 5 to print the book list" << endl;
 		cout << "Enter 0 to exit" << endl;
 		int choice1;
 		cin >> choice1;
@@ -151,55 +151,58 @@ int main() {
 		switch (choice1) {
 		case 1:
 		{
+			cout << "Enter full book description to erase" << endl;
+			cin.ignore();
 			cin >> yourBook;
-			auto it = lib.find(yourBook);
-			if (it != lib.end())
-				cout << it->first << " " << it->second << endl;
+			auto it = lib.find(yourBook.getAuthor());
+			if (it != lib.end()) {
+				lib.erase(it);
+			}
 		}
 		break;
 		case 2:
 		{
+			cout << "Enter full book description to add to the library database" << endl;
+			cin.ignore();
 			cin >> yourBook;
-			auto it = lib.find(yourBook);
-			if (it != lib.end())
-				lib.erase(it);
+			lib.insert(pair<string, Book>(yourBook.getAuthor(), yourBook));
+			bookset.insert(yourBook.getAuthor());// renew set!!
 		}
 		break;
 		case 3:
 		{
+			cout << "Enter an author" << endl;
 			cin.ignore();
-			cin >> yourBook;
-			lib.insert(pair<Book, int>(yourBook, i++));
+			getline(cin, author, '\n');
+		
+			for (auto it = bookset.begin(); it != bookset.end(); it++) {
+				auto ret = lib.equal_range(*it);
+					if (*it == author)//by author
+						for (auto mit = ret.first; mit != ret.second; mit++)
+							cout << mit->second << endl;
+			}
 		}
 		break;
 		case 4:
 		{
-			cout << "Enter author" << endl;
-			cin.ignore();
-			getline(cin, author, '#');
+			cout << "Enter publishing year" << endl;
+			cin >> publish;
 			for (auto it = lib.begin(); it != lib.end(); it++) {
-				if (it->first.getAuthor() == author)
+				if (it->second.getYear() == publish)
 					cout << it->first << " " << it->second << endl;
 			}
 		}
 		break;
 		case 5:
 		{
-			cout << "Enter publishing year" << endl;
-			cin >> publish;
-			for (auto it = lib.begin(); it != lib.end(); it++) {
-				if (it->first.getYear() == publish)
-					cout << it->first << " " << it->second << endl;
+			//cout << "Equal ranges from multimap" << endl;
+			cout << endl << "БИБЛИОТЕКА:" << endl;
+			for (auto it = bookset.begin(); it != bookset.end(); it++) {
+				auto ret = lib.equal_range(*it);
+				cout << ret.first->first << endl;
+				for (auto mit = ret.first; mit != ret.second; mit++)
+					cout << mit->second << endl;
 			}
-		}
-		break;
-		case 6:
-		{
-			for_each(lib.begin(), lib.end(), [](pair<Book, int> el) {
-				cout << el.first << " " << el.second << endl;
-			});
-
-
 		}
 		break;
 		case 0:
@@ -207,16 +210,6 @@ int main() {
 			break;
 		}
 	}
-
-	//cout << "Equal ranges from multimap" << endl;
-	cout << endl << "Library" << endl;
-	for (auto it = bookset.begin(); it != bookset.end(); it++) {
-		auto ret = lib.equal_range(*it);
-		cout << ret.first->first << endl;
-		for (auto mit = ret.first; mit != ret.second; mit++)
-			cout << mit->second << endl;
-	}
-
 
 	system("pause");
 	return 0;

@@ -28,12 +28,12 @@ string Book::getYear() const
 
 bool Book::operator<(const Book & obj) const
 {
-	return(this-> publish > obj.publish);//> не ошибка, а чтобы сет выводил по наименьшей цене
+	return(this-> publish > obj.publish);
 }
 
 ostream & operator<<(ostream & os, Book obj)
 {
-	os << obj.author << " " << obj.title << " " << obj.publish << " " << obj.number;
+	os << "\t" << obj.title << " " << obj.publish << " " << obj.number;
 	return os;
 }
 
