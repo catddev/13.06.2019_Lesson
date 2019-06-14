@@ -51,7 +51,7 @@ int main() {
 	string str;
 	while (!read_file.eof()) {
 		read_file >> str;
-		transform(str.begin(), str.end(), str.begin(), ::tolower);//string to lower!!!
+		transform(str.begin(), str.end(), str.begin(), tolower);//string to lower!!!
 		sd.insert(str);//formulate dictionary
 	}
 	for_each(sd.begin(), sd.end(), [](string el) {
