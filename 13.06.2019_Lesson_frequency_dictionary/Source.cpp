@@ -14,18 +14,18 @@ using namespace std;
 
 
 int main() {
-	//ifstream in_file("dict.txt");
-	//map<string, int> d;
+	ifstream in_file("dict.txt");
+	map<string, int> d;
 
-	//string s;
-	//while (!in_file.eof()) {
-	//	in_file >> s;//first<string>
-	//	d[s]++;//second<int> ++
-	//}
-	//for_each(d.begin(), d.end(), [](pair<string, int> el) {//for MAP always use template class (PAIR<type, type>) with name El, т.кю мэп содержит 2 значения
-	//	cout << el.first << " " << el.second << endl;
-	//});
-	//cout << endl;
+	string s;
+	while (!in_file.eof()) {
+		in_file >> s;//first<string>
+		d[s]++;//second<int> ++
+	}
+	for_each(d.begin(), d.end(), [](pair<string, int> el) {//for MAP always use template class (PAIR<type, type>) with name El, т.кю мэп содержит 2 значения
+		cout << el.first << " " << el.second << endl;
+	});
+	cout << endl;
 
 	//1.	Программа проверки правильности слов в текстовом файле.
 	//Проверка правильности осуществляется с помощью частотного словаря.
@@ -43,66 +43,66 @@ int main() {
 	setlocale(LC_ALL, "");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
-	//ifstream read_file("read.txt");
-	//
-	//vector<string> v;
-	//set<string> sd;
+	ifstream read_file("read.txt");
+	
+	vector<string> v;
+	set<string> sd;
 
-	//string str;
-	//while (!read_file.eof()) {
-	//	read_file >> str;
-	//	transform(str.begin(), str.end(), str.begin(), ::tolower);//string to lower!!!
-	//	sd.insert(str);
-	//}
-	//for_each(sd.begin(), sd.end(), [](string el) {
-	//	cout << el << endl;
-	//});
-	//cout << endl;
+	string str;
+	while (!read_file.eof()) {
+		read_file >> str;
+		transform(str.begin(), str.end(), str.begin(), ::tolower);//string to lower!!!
+		sd.insert(str);
+	}
+	for_each(sd.begin(), sd.end(), [](string el) {
+		cout << el << endl;
+	});
+	cout << endl;
 
-	//ifstream text("check_text.txt");
-	//while (!text.eof()) {
-	//	text >> str;
-	//	v.push_back(str);
-	//}
+	ifstream text("check_text.txt");
+	while (!text.eof()) {
+		text >> str;
+		v.push_back(str);
+	}
 
-	//for (auto it = v.begin(); it != v.end(); it++)
-	//{
-	//	auto fit = sd.find(*it);//fit - find_iterator
-	//	if (fit != sd.end())
-	//		continue;
-	//	else {
-	//		int choice;
-	//		cout << "There is no word \"" << *it << "\" in the dictionary" << endl;
-	//		cout << "Enter 1 to change this word" << endl;
-	//		cout << "Enter 2 to add this word into the dictionary" << endl;
-	//		cin >> choice;
+	for (auto it = v.begin(); it != v.end(); it++)
+	{
+		auto fit = sd.find(*it);//fit - find_iterator
+		if (fit != sd.end())
+			continue;
+		else {
+			int choice;
+			cout << "There is no word \"" << *it << "\" in the dictionary" << endl;
+			cout << "Enter 1 to change this word" << endl;
+			cout << "Enter 2 to add this word into the dictionary" << endl;
+			cin >> choice;
 
-	//		switch (choice) {
-	//		case 1:
-	//		{
-	//			string tmp = *it;
-	//			string str;
-	//			cout << "Enter new word" << endl;
-	//			cin >> str;
-	//			replace(v.begin(), v.end(), tmp, str);
-	//		}
-	//		break;
-	//		case 2:
-	//			sd.insert(*it);
-	//		break;
-	//		}
-	//	}
-	//}
+			switch (choice) {
+			case 1:
+			{
+				string tmp = *it;
+				string str;
+				cout << "Enter new word" << endl;
+				cin >> str;
+				replace(v.begin(), v.end(), tmp, str);
+			}
+			break;
+			case 2:
+				sd.insert(*it);
+			break;
+			}
+		}
+	}
 
-	//cout << "TEXT REDACTED" << endl;
-	//for_each(v.begin(), v.end(), [](string el) {
-	//	cout << el << endl;
-	//});
+	cout << "TEXT REDACTED" << endl;
+	for_each(v.begin(), v.end(), [](string el) {
+		cout << el << endl;
+	});
 
-	//cout << endl << "DICTIONARY" << endl;
-	//for_each(sd.begin(), sd.end(), [](string el) {
-	//	cout << el << endl;
-	//});
+	cout << endl << "DICTIONARY" << endl;
+	for_each(sd.begin(), sd.end(), [](string el) {
+		cout << el << endl;
+	});
 
 	//Написать программу учета книг в библиотеке. Сведения о книгах : ФИО автора, название, год издания, количество экземпляров.
 	//Обеспечить :
