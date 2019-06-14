@@ -20,7 +20,7 @@ int main() {
 	string s;
 	while (!in_file.eof()) {
 		in_file >> s;//first<string>
-		d[s]++;//second<int> ++
+		d[s]++;//second<int> ++ by [key=s]
 	}
 	for_each(d.begin(), d.end(), [](pair<string, int> el) {//for MAP always use template class (PAIR<type, type>) with name El, т.кю мэп содержит 2 значения
 		cout << el.first << " " << el.second << endl;
@@ -46,13 +46,13 @@ int main() {
 	ifstream read_file("read.txt");
 	
 	vector<string> v;
-	set<string> sd;
+	set<string> sd;//better for dictionary than map, as contains only unique values
 
 	string str;
 	while (!read_file.eof()) {
 		read_file >> str;
 		transform(str.begin(), str.end(), str.begin(), ::tolower);//string to lower!!!
-		sd.insert(str);
+		sd.insert(str);//formulate dictionary
 	}
 	for_each(sd.begin(), sd.end(), [](string el) {
 		cout << el << endl;
@@ -62,29 +62,29 @@ int main() {
 	ifstream text("check_text.txt");
 	while (!text.eof()) {
 		text >> str;
-		v.push_back(str);
+		v.push_back(str);//vector of the text word by word to check
 	}
 
 	for (auto it = v.begin(); it != v.end(); it++)
 	{
-		auto fit = sd.find(*it);//fit - find_iterator
+		auto fit = sd.find(*it);//fit - find_iterator, check every value of vector (v[i]=*it)
 		if (fit != sd.end())
-			continue;
+			continue;//means it has found this word in the dictionary and it's correct
 		else {
 			int choice;
-			cout << "There is no word \"" << *it << "\" in the dictionary" << endl;
+			cout << "There is no word \"" << *it << "\" in the dictionary" << endl;// \" to print ""
 			cout << "Enter 1 to change this word" << endl;
-			cout << "Enter 2 to add this word into the dictionary" << endl;
+			cout << "Enter 2 to add this word to the dictionary" << endl;
 			cin >> choice;
 
 			switch (choice) {
 			case 1:
 			{
-				string tmp = *it;
+				string tmp = *it;//saving value to the string type
 				string str;
 				cout << "Enter new word" << endl;
 				cin >> str;
-				replace(v.begin(), v.end(), tmp, str);
+				replace(v.begin(), v.end(), tmp, str);//replace saved value to the new one through whole vector
 			}
 			break;
 			case 2:
@@ -96,10 +96,11 @@ int main() {
 
 	cout << "TEXT REDACTED" << endl;
 	for_each(v.begin(), v.end(), [](string el) {
-		cout << el << endl;
+		cout << el << " ";
 	});
+	cout << endl;
 
-	cout << endl << "DICTIONARY" << endl;
+	cout << endl << "DICTIONARY renewed" << endl;
 	for_each(sd.begin(), sd.end(), [](string el) {
 		cout << el << endl;
 	});
