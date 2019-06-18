@@ -5,7 +5,7 @@ Book::Book()
 	author = "";
 	title = "";
 	publish = "";
-	number = 0;
+	number = 2019;
 }
 
 Book::Book(string author, string title, string publish, int number)
@@ -26,9 +26,14 @@ string Book::getYear() const
 	return publish;
 }
 
-bool Book::operator<(const Book & obj) const
+string Book::getTitle() const
 {
-	return(this-> publish > obj.publish);
+	return title;
+}
+
+int Book::getNumber() const
+{
+	return number;
 }
 
 ostream & operator<<(ostream & os, Book obj)
