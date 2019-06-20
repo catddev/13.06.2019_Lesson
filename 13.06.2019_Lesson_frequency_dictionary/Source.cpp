@@ -17,65 +17,50 @@ bool asc(const Book& obj1, const Book& obj2) {
 	return (obj1.getYear() < obj2.getYear()); // чтобы работало по году нужно чтобы в прототипе getYear() было CONST!
 }
 
-void remove_by_property(multimap<string, Book>& mb, string prop) {
+void remove_by_property(multimap<string, Book>& mb, int prop) {
 	string tmp;
 	cout << "Enter your property's value" << endl;
 	cin.ignore();//!
 	getline(cin, tmp, '\n');
 
-	if (prop == "author") {
+	auto it = mb.begin();
 
-			for (auto it = mb.begin(); it != mb.end(); it++) {
-				if (it->second.getAuthor() == tmp) {
-					if (it != mb.end()) {
-						mb.erase(it);
-						if (!mb.empty())
-							it = mb.begin();
-						else break;
-					}
-				}
-			}
+	if (prop == 1) {
+		mb.erase(tmp); //если erase по ключу, то удаляет сразу все элементы с таким ключом
 	}
-	else if (prop == "title") {
-		for (auto it = mb.begin(); it != mb.end(); it++)
-			if (it->second.getTitle() == tmp) {
-				if (it != mb.end()) {
-					mb.erase(it);
-					if (!mb.empty())
-						it = mb.begin();
-					else break;
-				}
-			}
+	else if (prop == 2) {
+		for (auto it = mb.begin(); it != mb.end();/*здесь пусто, без шага цикла, для multimap не сработает */) {
+			auto nit = it++;//пересохраняем итератор иначе будет ошибка cannot increment value-initialized iterator it, т.е. без nit просто it++ нельзя
+			if (nit->second.getTitle() == tmp)
+				mb.erase(nit);
+		}
 	}
-	else if (prop == "year") {
-		for (auto it = mb.begin(); it != mb.end(); it++)
-			if (it->second.getYear() == tmp) {
-				if (it != mb.end()) {
-					mb.erase(it);
-					if (!mb.empty())
-						it = mb.begin();
-					else break;
-				}
-			}
+	else if (prop == 3) {
+		auto it = mb.begin();// в map/multimap name.begin() указывает на НАЧАЛО самого первого элемента, а не сам элемент, а name.end() указывает на КОНЕЦ самого последнего элемента, а не на сам элемент
+		// когда =1, begin указывает на начало первого элемента, на end его конец
+		while (it != mb.end()) {
+			auto nit = it++;
+			if (nit->second.getYear() == tmp)
+				mb.erase(nit);
+		}
 	}
 }
 
 
 
-
 int main() {
-	//ifstream in_file("dict.txt");
-	//map<string, int> d;
+	ifstream in_file("dict.txt");
+	map<string, int> d;
 
-	//string s;
-	//while (!in_file.eof()) {
-	//	in_file >> s;//first<string>
-	//	d[s]++;//second<int> ++ by [key=s]
-	//}
-	//for_each(d.begin(), d.end(), [](pair<string, int> el) {//for MAP always use template class (PAIR<type, type>) with name El, т.кю мэп содержит 2 значения
-	//	cout << el.first << " " << el.second << endl;
-	//});
-	//cout << endl;
+	string s;
+	while (!in_file.eof()) {
+		in_file >> s;//first<string>
+		d[s]++;//second<int> ++ by [key=s]
+	}
+	for_each(d.begin(), d.end(), [](pair<string, int> el) {//for MAP always use template class (PAIR<type, type>) with name El, т.кю мэп содержит 2 значения
+		cout << el.first << " " << el.second << endl;
+	});
+	cout << endl;
 
 	//1.	Программа проверки правильности слов в текстовом файле.
 	//Проверка правильности осуществляется с помощью частотного словаря.
@@ -93,67 +78,67 @@ int main() {
 	setlocale(LC_ALL, "");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
-	//ifstream read_file("read.txt");
-	//
-	//vector<string> v;
-	//set<string> sd;//better for dictionary than map, as contains only unique values
+	ifstream read_file("read.txt");
+	
+	vector<string> v1;
+	set<string> sd;//better for dictionary than map, as contains only unique values
 
-	//string str;
-	//while (!read_file.eof()) {
-	//	read_file >> str;
-	//	transform(str.begin(), str.end(), str.begin(), tolower);//string to lower!!!
-	//	sd.insert(str);//formulate dictionary
-	//}
-	//for_each(sd.begin(), sd.end(), [](string el) {
-	//	cout << el << endl;
-	//});
-	//cout << endl;
+	string str;
+	while (!read_file.eof()) {
+		read_file >> str;
+		transform(str.begin(), str.end(), str.begin(), tolower);//string to lower!!!
+		sd.insert(str);//formulate dictionary
+	}
+	for_each(sd.begin(), sd.end(), [](string el) {
+		cout << el << endl;
+	});
+	cout << endl;
 
-	//ifstream text("check_text.txt");
-	//while (!text.eof()) {
-	//	text >> str;
-	//	v.push_back(str);//vector of the text word by word to check
-	//}
+	ifstream text("check_text.txt");
+	while (!text.eof()) {
+		text >> str;
+		v1.push_back(str);//vector of the text word by word to check
+	}
 
-	//for (auto it = v.begin(); it != v.end(); it++)
-	//{
-	//	auto fit = sd.find(*it);//fit - find_iterator, check every value of vector (v[i]=*it)
-	//	if (fit != sd.end())
-	//		continue;//means it has found this word in the dictionary and it's correct
-	//	else {
-	//		int choice;
-	//		cout << "There is no word \"" << *it << "\" in the dictionary" << endl;// \" to print ""
-	//		cout << "Enter 1 to change this word" << endl;
-	//		cout << "Enter 2 to add this word to the dictionary" << endl;
-	//		cin >> choice;
+	for (auto it = v1.begin(); it != v1.end(); it++)
+	{
+		auto fit = sd.find(*it);//fit - find_iterator, check every value of vector (v[i]=*it)
+		if (fit != sd.end())
+			continue;//means it has found this word in the dictionary and it's correct
+		else {
+			int choice;
+			cout << "There is no word \"" << *it << "\" in the dictionary" << endl;// \" to print ""
+			cout << "Enter 1 to change this word" << endl;
+			cout << "Enter 2 to add this word to the dictionary" << endl;
+			cin >> choice;
 
-	//		switch (choice) {
-	//		case 1:
-	//		{
-	//			string tmp = *it;//saving value to the string type
-	//			string str;
-	//			cout << "Enter new word" << endl;
-	//			cin >> str;
-	//			replace(v.begin(), v.end(), tmp, str);//replace saved value to the new one through whole vector
-	//		}
-	//		break;
-	//		case 2:
-	//			sd.insert(*it);
-	//		break;
-	//		}
-	//	}
-	//}
+			switch (choice) {
+			case 1:
+			{
+				string tmp = *it;//saving value to the string type
+				string str;
+				cout << "Enter new word" << endl;
+				cin >> str;
+				replace(v1.begin(), v1.end(), tmp, str);//replace saved value to the new one through whole vector
+			}
+			break;
+			case 2:
+				sd.insert(*it);
+			break;
+			}
+		}
+	}
 
-	//cout << "TEXT REDACTED" << endl;
-	//for_each(v.begin(), v.end(), [](string el) {
-	//	cout << el << " ";
-	//});
-	//cout << endl;
+	cout << "TEXT REDACTED" << endl;
+	for_each(v1.begin(), v1.end(), [](string el) {
+		cout << el << " ";
+	});
+	cout << endl;
 
-	//cout << endl << "DICTIONARY renewed" << endl;
-	//for_each(sd.begin(), sd.end(), [](string el) {
-	//	cout << el << endl;
-	//});
+	cout << endl << "DICTIONARY renewed" << endl;
+	for_each(sd.begin(), sd.end(), [](string el) {
+		cout << el << endl;
+	});
 
 	//Написать программу учета книг в библиотеке. Сведения о книгах : ФИО автора, название, год издания, количество экземпляров.
 	//Обеспечить :
@@ -172,7 +157,7 @@ int main() {
 
 	string author, title, publish;
 	int number;
-	vector<Book> b1;
+	vector<Book> v;
 
 	while (!lib_file.eof()) {
 		getline(lib_file, author, '#');
@@ -182,7 +167,7 @@ int main() {
 		lib_file.ignore();
 		bookset.insert(author);
 		lib.insert(pair<string, Book>(author, Book(author, title, publish, number)));
-		b1.push_back(Book(author, title, publish, number));
+		v.push_back(Book(author, title, publish, number));
 		
 	}
 	//cout << endl;
@@ -227,10 +212,12 @@ int main() {
 			//}
 
 			//or erase by filter!
-			string property;
-			cout << "Enter \"author\" to erase by author" << endl;
-			cout << "Enter \"title\" to erase by title" << endl;
-			cout << "Enter \"year\" to erase by publishing year" << endl;
+	
+
+			int property;
+			cout << "Enter 1 to erase by author" << endl;
+			cout << "Enter 2 to erase by title" << endl;
+			cout << "Enter 3 to erase by publishing year" << endl;
 			cin >> property;
 
 			remove_by_property(lib, property);
@@ -242,7 +229,7 @@ int main() {
 				});
 			}
 			else
-				cout << "EMPTY MAP!" << endl;
+				cout << endl << "EMPTY MAP!" << endl;
 
 		}
 		break;
@@ -300,8 +287,8 @@ int main() {
 		}
 	}
 
-	sort(b1.begin(), b1.end(), asc); //bool asc
-	for_each(b1.begin(), b1.end(), [](Book b) {
+	sort(v.begin(), v.end(), asc); //bool asc
+	for_each(v.begin(), v.end(), [](Book b) {
 		cout << b.getAuthor() << " " << b << endl;
 	});
 
